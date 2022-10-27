@@ -81,7 +81,7 @@ import logging
 import requests
 from ina219 import INA219,DeviceRangeError
 
-print(os.environ['SUPERVISOR_TOKEN'])
+TOKEN=os.environ['SUPERVISOR_TOKEN']
 
 # Define I2C bus
 DEVICE_BUS = 1
@@ -166,7 +166,8 @@ else:
         print('The battery is going to dead! Ready to shut down!')
 # It will cut off power when initialized shutdown sequence.
         bus.write_byte_data(DEVICE_ADDR, 24,180)
-        
+        r=requests.post("http://supervisor/host/shutdown", headers={"Authorization": TOKEN})
+        print(r.status_code)
         while True:
             time.sleep(10)
 EOF
