@@ -138,7 +138,7 @@ headers = {
 charging = "Yes" if batt_current > 0 else "No"
 
 requests.post("http://supervisor/homeassistant/api/states/ups.battery_voltage", headers=headers, json={"state": batt_voltage, "attributes": {"unit_of_measurement": "V", "icon": "mdi:battery", "friendly_name": "Battery voltage"}})
-requests.post("http://supervisor/homeassistant/api/states/ups.charging", headers=headers, json={"state": charging, "attributes": {"unit_of_measurement": "", "icon": "material-symbols:charger", "friendly_name": "Battery charging"}})
+requests.post("http://supervisor/homeassistant/api/states/ups.charging", headers=headers, json={"state": charging, "attributes": {"unit_of_measurement": "", "icon": "mdi:battery-charging", "friendly_name": "Battery charging"}})
 requests.post("http://supervisor/homeassistant/api/states/ups.power", headers=headers, json={"state": batt_power / 1000, "attributes": {"unit_of_measurement": "W", "icon": "mdi:lightning-bolt", "friendly_name": "Battery power"}})
 
 # Raspberry Pi Communicates with MCU via i2c protocol.
