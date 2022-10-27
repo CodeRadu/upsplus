@@ -3,7 +3,6 @@
 
 # initializing init-functions.
 . /lib/lsb/init-functions
-sudo raspi-config nonint do_i2c 0
 
 # check if the network is working properly.
 log_action_msg "Welcome to 52Pi Technology UPS Plus auto-install Program!"
@@ -23,8 +22,8 @@ fi
 # Package check and installation
 install_pkgs()
 {
-	`sudo apt-get -qq update`
-	`sudo apt-get -y -qq install sudo git i2c-tools`
+	`apt -qq update`
+	`apt -y -qq install git i2c-tools`
 }
 
 log_action_msg "Start the software check..."
@@ -165,7 +164,7 @@ else:
         print('The battery is going to dead! Ready to shut down!')
 # It will cut off power when initialized shutdown sequence.
         bus.write_byte_data(DEVICE_ADDR, 24,240)
-        os.system("sudo sync && sudo halt")
+        os.system("sync && halt")
         while True:
             time.sleep(10)
 EOF
@@ -242,20 +241,6 @@ print(r.text)
 
 EOF
 log_success_msg "Create UPS Plus IoT customer service python script successful" 
-# Add script to crontab 
-log_action_msg "Add into general crontab list."
-
-(crontab -l 2>/dev/null; echo "* * * * * /usr/bin/python3 $HOME/bin/upsPlus.py > /tmp/upsPlus.log") | crontab -
-(crontab -l 2>/dev/null; echo "* * * * * /usr/bin/python3 $HOME/bin/upsPlus_iot.py > /tmp/upsPlus_iot.log") | crontab -
-sudo systemctl restart cron
-
-if [[ $? -eq 0 ]]; then
-	log_action_msg "crontab has been created successful!"
-else
-	log_failure_msg "Create crontab failed!!"
-	log_warning_msg "Please create crontab manually."
-	log_action_msg "Usage: crontab -e"
-fi 
 
 # Testing and Greetings
 if [[ -e $HOME/bin/upsPlus.py ]]; then 
