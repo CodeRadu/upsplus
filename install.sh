@@ -90,7 +90,7 @@ DEVICE_BUS = 1
 DEVICE_ADDR = 0x17
 
 # Set the threshold of UPS automatic power-off to prevent damage caused by battery over-discharge, unit: mV.
-PROTECT_VOLT = 3700  
+PROTECT_VOLT = 3200  
 
 # Set the sample period, Unit: min default: 2 min.
 SAMPLE_TIME = 2
@@ -130,6 +130,13 @@ except DeviceRangeError:
      print("-"*60)
      print('Battery power is too high.')
 
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer {}".format(TOKEN)
+}
+
+requests.post("http://supervisor/homeassistant/api/states/ups.battery_voltage", headers=headers, json={"state": batt_voltage, "attributes": {"unit_of_measurement": "V", "icon": "mdi:battery", "friendly_name": "Battery voltage"}})
+
 # Raspberry Pi Communicates with MCU via i2c protocol.
 bus = smbus2.SMBus(DEVICE_BUS)
 
@@ -166,7 +173,7 @@ else:
         print('The battery is going to dead! Ready to shut down!')
 # It will cut off power when initialized shutdown sequence.
         bus.write_byte_data(DEVICE_ADDR, 24,180)
-        r=requests.post("http://supervisor/host/shutdown", headers={"Authorization": TOKEN})
+        r=requests.post("http://supervisor/host/shutdown", headers={"Authorization": "Bearer {}".format(TOKEN)})
         print(r.status_code)
         while True:
             time.sleep(10)
