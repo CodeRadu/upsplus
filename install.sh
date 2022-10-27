@@ -78,8 +78,10 @@ import os
 import time
 import smbus2
 import logging
+import requests
 from ina219 import INA219,DeviceRangeError
 
+print(os.environ['SUPERVISOR_TOKEN'])
 
 # Define I2C bus
 DEVICE_BUS = 1
@@ -163,8 +165,8 @@ else:
         print('-'*60)
         print('The battery is going to dead! Ready to shut down!')
 # It will cut off power when initialized shutdown sequence.
-        bus.write_byte_data(DEVICE_ADDR, 24,240)
-        os.system("sync && halt")
+        bus.write_byte_data(DEVICE_ADDR, 24,180)
+        
         while True:
             time.sleep(10)
 EOF
@@ -182,7 +184,7 @@ import random
 
 DEVICE_BUS = 1
 DEVICE_ADDR = 0x17
-PROTECT_VOLT = 3700
+PROTECT_VOLT = 3200
 SAMPLE_TIME = 2
 FEED_URL = "https://api.52pi.com/feed"
 time.sleep(random.randint(0, 59))
