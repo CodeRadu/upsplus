@@ -135,10 +135,10 @@ headers = {
     "Authorization": "Bearer {}".format(TOKEN)
 }
 
-charging = true if battery_current > 0 else false
+charging = true if batt_current > 0 else false
 
 requests.post("http://supervisor/homeassistant/api/states/ups.battery_voltage", headers=headers, json={"state": batt_voltage, "attributes": {"unit_of_measurement": "V", "icon": "mdi:battery", "friendly_name": "Battery voltage"}})
-requests.post("http://supervisor/homeassistant/api/states/ups.charging", headers=headers, json={"state": batt_voltage, "attributes": {"unit_of_measurement": "", "icon": "material-symbols:charger", "friendly_name": "Battery charging"}})
+requests.post("http://supervisor/homeassistant/api/states/ups.charging", headers=headers, json={"state": charging, "attributes": {"unit_of_measurement": "", "icon": "material-symbols:charger", "friendly_name": "Battery charging"}})
 
 # Raspberry Pi Communicates with MCU via i2c protocol.
 bus = smbus2.SMBus(DEVICE_BUS)
